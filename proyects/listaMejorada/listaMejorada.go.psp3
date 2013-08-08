@@ -3,9 +3,9 @@
 ///---     BY: Alfonso Alvarez Sanchez
 ///---  Reuse: listaMejorada.go and its methods
 ///---   Lang: GoLang
-///---   Desc: List that carries 2 values per node. We can calculate proxy size til here.
+///---   Desc: List that carries 2 values per node.
 ///---   More: Made for Psp course
-///---         Program4
+///---         Program3
 ///---******************FinHeader****************************/
 package listaMejorada
 
@@ -48,7 +48,7 @@ func (l *Lista) Agrega(n *Nodo){
 
 ///***Funcion
 ///...Regresa los elementos de la lista
-func (l *Lista) Elementos() (elementosX, elementosY []float64){  //mm
+func (l *Lista) elementos() (elementosX, elementosY []float64){  //mm
 	tmp := l.Primero
 	elementosX, elementosY = []float64{}, []float64{}  //mm
 	elementosX, elementosY = nil, nil   //mm
@@ -75,7 +75,7 @@ func (l *Lista) Init() (*Lista){
 ///... Regresa la sumatoria de la lista de los elementosX
 func (l *Lista) SumX() (sumX float64){
 	sumX = 0.0
-	valoresX, _ := l.Elementos()
+	valoresX, _ := l.elementos()
 	for index, _ := range valoresX{
 		sumX = sumX + valoresX[index]
 	}///...FinFor
@@ -86,7 +86,7 @@ func (l *Lista) SumX() (sumX float64){
 ///... Regresa la sumatoria de la lista de los elementosY
 func (l *Lista) SumY() (sumY float64){
 	sumY = 0.0
-	_, valoresY := l.Elementos()
+	_, valoresY := l.elementos()
 	for index, _ := range valoresY{
 		sumY = sumY + valoresY[index]
 	}///...FinFor
@@ -106,7 +106,7 @@ func (l *Lista) SumatoriaCuadrada(elementos []float64) float64{
 ///***Funcion
 ///... Regresa la sumatoria de la lista de los elementosX por los elementosY al cuadrado
 func (l *Lista) SumXporY() float64{
-	valoresX, valoresY := l.Elementos()
+	valoresX, valoresY := l.elementos()
 	sum := 0.0
 	for index, _ := range valoresX{
 		sum = sum + (valoresX[index] * valoresY[index])
@@ -125,7 +125,7 @@ func (l *Lista) Media() (mediaX, mediaY float64){
 ///***Funcion
 ///... Regresa la desv estandar de los elementos en X y en Y
 func (l *Lista) DesviacionEst() (desvEX, desvEY float64){
-	valoresX, valoresY := l.Elementos()      //mm
+	valoresX, valoresY := l.elementos()      //mm
 	desvEX = math.Pow((l.SumatoriaCuadrada(valoresX)/float64(l.Cantidad-1)), .5)  //mm
 	desvEY = math.Pow((l.SumatoriaCuadrada(valoresY)/float64(l.Cantidad-1)), .5)  //mm
 	return
@@ -135,7 +135,7 @@ func (l *Lista) DesviacionEst() (desvEX, desvEY float64){
 ///... Regresa Beta1 de los elemenos de la lista
 func (l *Lista) GetBeta1() (beta1 float64){
 	mediaX, mediaY := l.Media()
-	valoresX, _ := l.Elementos()
+	valoresX, _ := l.elementos()
 	dividendo := l.SumXporY() - (l.Cantidad * mediaX * mediaY)
 	divisor := l.SumatoriaCuadrada(valoresX) - (l.Cantidad * math.Pow(mediaX, 2))
 	beta1 = dividendo/divisor
@@ -153,7 +153,7 @@ func (l *Lista) GetBeta0() (beta0 float64){
 ///***Funcion
 ///... Regresa R de los elemenos de la lista
 func (l *Lista) GetR() (r float64){
-	valoresX, valoresY := l.Elementos()
+	valoresX, valoresY := l.elementos()
 	dividendo := (l.Cantidad * l.SumXporY()) - (l.SumX() * l.SumY())
 	divisor := math.Pow(((l.Cantidad * l.SumatoriaCuadrada(valoresX)) - (l.SumX() * l.SumX())) * ((l.Cantidad * l.SumatoriaCuadrada(valoresY)) - (l.SumY() * l.SumY())), .5)
 	r = dividendo/divisor
@@ -171,31 +171,3 @@ func (l *Lista) GetRCuad() float64{
 func (l *Lista) GetYK(XK float64) float64{
 	return l.GetBeta0() + (l.GetBeta1() * XK)
 }///...FinFunc
-
-///***Funcion
-///... regresa la sumatoria logaritmica de los valores de la lista.
-///...  Usa LOCs de proxy e items por cada uno, por lo que se deben dividir
-func (l *Lista) sumLog(valoresX []float64) float64{
-	sum := 0.0
-	for index, _ := range valoresX{
-		sum = sum + (math.Log(valoresX[index]))
-	}///...FincFor
-	return sum
-}///...FinFunc
-
-///***Funcion
-///... Regresa el promedio de la sumatoria de logs
-func (l *Lista) AvgLog(valoresX []float64) float64{
-	return l.sumLog(valoresX) / l.Cantidad
-}///...FinFunc
-
-///***Funcion
-///... regresa la varianza de los valores para calcular proxy size
-func (l *Lista) VarLog(valoresX []float64) float64{
-	sum := 0.0
-	avg := l.AvgLog(valoresX)
-	for index, _ := range valoresX{
-		sum = sum + math.Pow((math.Log(valoresX[index]) - avg), 2)
-	}///...FinFor
-	return sum/(l.Cantidad -1)
-}///...FinFor
