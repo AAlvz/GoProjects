@@ -79,4 +79,5 @@ func leeLinea(lector *bufio.Reader, m map[string]int)([]uint8, map[string]int){
 ///... Main. Corre el programa enviando el nombre del archivo
 func main(){
     leeArch("listaMejorada.go")
+    leeArch("integra.go")
 }///...FinMain

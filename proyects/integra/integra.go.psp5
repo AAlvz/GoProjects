@@ -11,7 +11,6 @@ package integra
 
 ///***Imports
 import("math"
-	"./../../proyects/round"
 //"fmt"
 )
 
@@ -56,39 +55,3 @@ func Simpson(numSeg, x, dof float64)(float64){
 	sumatoriaPares, sumatoriaImpares := SumaFuncionDeX(numSeg, x, dof)
 	return ( (W/3)*( FunciondeX(0.0,dof) + sumatoriaPares + sumatoriaImpares + FunciondeX(x,dof) ) )
 }///...FinFuncion
-
-///***Funcion
-///...AdivinaPconX ... devuelve el valor x para un valor buscado p
-func AdivinaPconX(num_seg, pBusc, dof float64)(float64){
-	x := 1.0
-	d := .5
-	num_seg = 10.0
-	p := Simpson(num_seg, x, dof)
-	for round.Round(p, 5) != pBusc{
-                for p < pBusc{
-			x = x + d
-			p = Simpson(num_seg, x, dof)
-                }///...finFor
-                if p > pBusc {
-			d = d/2
-                    for p > pBusc{
-			    x = x - d
-			    p = Simpson(num_seg, x, dof)
-
-                    }///...FinFor
-			d = d/2
-                }else{
-			d = d/2
-                }///...FinElse
-            }///...FinFor
-	return round.Round(x, 5)
-}///...FinFunc
-
-///***Funcion
-///... obtiene el valor de la cola de la graf
-func GetCola(x, dof float64) float64{
-//	p := Simpson(10.0, x, dof)
-//	tail := 1 - 2*p
-//	return tail
-	return 1 - (2 * Simpson(10.0, x, dof))
-}///...FunFunc
